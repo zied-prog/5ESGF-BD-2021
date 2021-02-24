@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESGF.Sudoku.Spark.RecursiveSearch", "ESGF.Sudoku.Spark.RecursiveSearch\ESGF.Sudoku.Spark.RecursiveSearch.csproj", "{7BD022F1-5C24-406A-A8E8-77D9E7B4D750}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Spark.CSharp.Examples", "Microsoft.Spark.CSharp.Examples\Microsoft.Spark.CSharp.Examples.csproj", "{FEAC21C3-F576-4254-A6F6-60481571E062}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{7BD022F1-5C24-406A-A8E8-77D9E7B4D750}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BD022F1-5C24-406A-A8E8-77D9E7B4D750}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BD022F1-5C24-406A-A8E8-77D9E7B4D750}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEAC21C3-F576-4254-A6F6-60481571E062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEAC21C3-F576-4254-A6F6-60481571E062}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEAC21C3-F576-4254-A6F6-60481571E062}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEAC21C3-F576-4254-A6F6-60481571E062}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
