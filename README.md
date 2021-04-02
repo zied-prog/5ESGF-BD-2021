@@ -9,14 +9,14 @@ Nous nous sommes inspiré du repo https://github.com/MyIntelligenceAgency/ECE-20
 
 
 ####  Adaptation pour prise en compte d'un fichier csv
-##### 1 Recuperation des arguments
+##### 1 - Recuperation des arguments
 ```c#
             var limitRows = int.Parse(args[0]);
             var coreCount = args[1];
             var nodeCount = args[2];
 ```
 
-##### 2 Creation et configuration de la session spark
+##### 2 - Creation et configuration de la session spark
 ```c#
            SparkSession spark = SparkSession
                 .Builder()
@@ -26,18 +26,18 @@ Nous nous sommes inspiré du repo https://github.com/MyIntelligenceAgency/ECE-20
                 .GetOrCreate();
 ```
 
-##### 3 Lecture de fichier csv avec un limit de nombre de ligne (limitRows)
+##### 3 - Lecture de fichier csv avec un limit de nombre de ligne (limitRows)
 ```c#      
     DataFrame df = spark.Read().Option("header", true).Option("inferSchema", true)
                 .Csv("C:\\Users\\abdel\\Desktop\\ESGF\\5ESGF-BD-2021\\ESGF.Sudoku.Spark.RecursiveSearch\\sudoku.csv");
             var limitedDf = df.Limit(limitRows);
 ```
-##### 4 Enregistrement de la methode de solving dans spark
+##### 4 - Enregistrement de la methode de solving dans spark
 Rq: on a jouté le caractere 'a' au sudoku pour qu'elle soit interpreté comme string  
 ```c# 
         spark.Udf().Register<string, string>("MLudf", (text) => Solve(text.Trim(new Char[] { ' ', '"', 'a' })));
 ```
-##### 5 Parsing du sudoku en strin to grid 
+##### 5 - Parsing du sudoku en strin to grid 
 ```c# 
 public static int[,] TextToGrid(string sudokuText)
         {
@@ -63,7 +63,7 @@ public static int[,] TextToGrid(string sudokuText)
 ```
 
 
-##### 6 Methode de solving 
+##### 6 - Methode de solving 
 ```c# 
   public static string Solve(string sudokuText)
         {
