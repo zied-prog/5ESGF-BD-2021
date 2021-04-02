@@ -1,11 +1,84 @@
-# 5ESGF-BD-2021
-Bienvenue sur le dépôt d'évaluation du cours c#/BigData.
+ï»¿# Projet C#
 
-Chaque groupe est invité à créer un Fork de ce dépôt principal muni d'un compte sur Github, travailler sur ce fork au sein du groupe, par le biais de validations, de push sur le server, et de pulls/tirages sur les machines locales des utilisateurs du groupe habilités sur le fork. Une fois le travail effectué et remonté sur le fork, une pull-request sera créée depuis le fork vers le dépôt principal pour fusion et évaluation.
+## RÃ©solution de sudokus avec SWARM
 
-Le fichier de solution "ESGF.Sudoku.Spark.sln" constitue l'environnement de base du travail et s'ouvre dans Visual Studio (attention à bien ouvrir la solution et ne pas rester en "vue de dossier").
-En l'état, la solution contient:
-- Le projet d'exemples en c# fournis avec Spark.Net est disponible dans la solution, ainsi que les [instructions permettant de les exécuter](Microsoft.Spark.CSharp.Examples).
-- Un projet de Console vide "ESGF.Sudoku.Spark.RecursiveSearch.csproj" vide, référençant le package Nuget de .Net pour Sharp, correspondant à la première étape de création du projet de l'un des groupes de travail.
 
-Les autres groupes sont invités à àjouter à la solution leur propre projet de Console créé sur ce modèle.
+###Introduction
+
+Nous nous sommes inspirÃ© du repo https://github.com/MyIntelligenceAgency/ECE-2021-FIN-E-Ing4-Finance-Gr02-IA1/tree/main/Sudoku.SwarmInt pour intÃ©grer le code de rÃ©solution de sudoku avec le solveur SWARM
+
+
+####  Adaptation pour prise en compte d'un fichier csv
+Recuperation des arguments
+```c#
+            var limitRows = int.Parse(args[0]);
+            var coreCount = args[1];
+            var nodeCount = args[2];
+```
+
+Creation et configuration de la session spark
+```c#
+           SparkSession spark = SparkSession
+                .Builder()
+                .AppName("Sentiment Analysis using .NET for Apache Spark")
+                .Config("spark.executor.cores", coreCount)
+                .Config("spark.executor.instances", nodeCount)
+                .GetOrCreate();
+```
+
+Lecture de fichier csv avec un limit de nombre de ligne (limitRows)
+```c#      
+    DataFrame df = spark.Read().Option("header", true).Option("inferSchema", true)
+                .Csv("C:\\Users\\abdel\\Desktop\\ESGF\\5ESGF-BD-2021\\ESGF.Sudoku.Spark.RecursiveSearch\\sudoku.csv");
+            var limitedDf = df.Limit(limitRows);
+```
+Enregistrement de la methode de solving dans spark 
+Rq: on a joutÃ© le caractere 'a' au sudoku pour qu'elle soit interpretÃ© comme string  
+```c# 
+        spark.Udf().Register<string, string>("MLudf", (text) => Solve(text.Trim(new Char[] { ' ', '"', 'a' })));
+```
+Parsing du sudoku en strin to grid 
+```c# 
+public static int[,] TextToGrid(string sudokuText)
+        {
+            var initial_grid = new int[9, 9];//matrice Ã  2 dimension;
+            var colindex = 0;//Variable de boucle de colonne;
+            var rowindex = 0;//Variable de boucle de ligneï¼›
+            foreach (var c in sudokuText)
+            {
+                if (colindex >= 9)
+                {
+                    colindex = 0;
+                    rowindex++;
+                }
+                if (rowindex >= 9)
+                {
+                    rowindex = 0;
+                }
+                initial_grid[rowindex, colindex] = int.Parse(c.ToString());
+                colindex++;
+            }
+            return initial_grid;
+        }
+```
+
+
+Methode de solving 
+```c# 
+  public static string Solve(string sudokuText)
+        {
+            const int numOrganisms = 200; 
+            const int maxEpochs = 10000;
+            const int maxRestarts = 150;
+            var solver = new SudokuSolver();
+            var solvedSudoku = solver.Solve(Sudoku.New(TextToGrid(sudokuText)), numOrganisms, maxEpochs, maxRestarts);
+            return solvedSudoku.ToString();
+        }
+```
+
+#### 2.3 Build et publication du projet 
+    dotnet publish -f netcoreapp3.1
+
+#### 2.3 Execution du program avec un jeux de parametre different (limitRows,coreCount,nodeCount ) et comparaison des resultats  
+    spark-submit --class org.apache.spark.deploy.dotnet.DotnetRunner --master local microsoft-spark-3-0_2.12-1.1.1.jar ESGF.Sudoku.Spark.Swarm.exe [limitRows] [coreCount] [nodeCount]
+
