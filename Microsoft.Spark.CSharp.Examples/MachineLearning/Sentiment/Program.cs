@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Diagnostics;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.Spark.Sql;
@@ -23,7 +24,9 @@ namespace Microsoft.Spark.Examples.MachineLearning.Sentiment
                     "Usage: <path to yelptest.csv> <path to MLModel.zip>");
                 Environment.Exit(1);
             }
+            Console.WriteLine("tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt ");
 
+           
             SparkSession spark = SparkSession
                 .Builder()
                 .AppName("Sentiment Analysis using .NET for Apache Spark")
@@ -35,24 +38,31 @@ namespace Microsoft.Spark.Examples.MachineLearning.Sentiment
                 .Option("header", true)
                 .Option("inferSchema", true)
                 .Csv(args[0]);
-            df.Show();
+           // df.Show();
 
             // Use ML.NET in a UDF to evaluate each review 
             spark.Udf().Register<string, bool>(
                 "MLudf",
                 (text) => Sentiment(text, args[1]));
-
+           
             // Use Spark SQL to call ML.NET UDF
             // Display results of sentiment analysis on reviews
             df.CreateOrReplaceTempView("Reviews");
+            var watch = Stopwatch.StartNew();
+
             DataFrame sqlDf = spark.Sql("SELECT ReviewText, MLudf(ReviewText) FROM Reviews");
+
+            watch.Stop();
+            spark.Stop();
             sqlDf.Show();
 
             // Print out first 20 rows of data
             // Prevent data getting cut off by setting truncate = 0
-            sqlDf.Show(20, 0, false);
+            sqlDf.Show(5, 0, false);
 
-            spark.Stop();
+
+            Console.WriteLine("ElapsedMilliseconds : " + watch.ElapsedMilliseconds);
+
         }
 
         // Method to call ML.NET code for sentiment analysis

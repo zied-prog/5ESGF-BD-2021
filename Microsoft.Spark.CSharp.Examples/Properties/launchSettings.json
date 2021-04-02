@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Microsoft.Spark.CSharp.Examples": {
+      "commandName": "Project",
+      "commandLineArgs": "MachineLearning.Sentiment.Program C:\\Users\\abdel\\Desktop\\ESGF_C#\\5ESGF-BD-2021\\Microsoft.Spark.CSharp.Examples\\MachineLearning\\Sentiment\\Resources\\yelptest.csv C:\\Users\\abdel\\Desktop\\ESGF_C#\\5ESGF-BD-2021\\Microsoft.Spark.CSharp.Examples\\MachineLearning\\Sentiment\\Resources\\MLModel.zip"
+    }
+  }
+}
