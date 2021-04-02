@@ -26,18 +26,18 @@ Nous nous sommes inspiré du repo https://github.com/MyIntelligenceAgency/ECE-20
                 .GetOrCreate();
 ```
 
-#### 1 Lecture de fichier csv avec un limit de nombre de ligne (limitRows)
+#### 3 Lecture de fichier csv avec un limit de nombre de ligne (limitRows)
 ```c#      
     DataFrame df = spark.Read().Option("header", true).Option("inferSchema", true)
                 .Csv("C:\\Users\\abdel\\Desktop\\ESGF\\5ESGF-BD-2021\\ESGF.Sudoku.Spark.RecursiveSearch\\sudoku.csv");
             var limitedDf = df.Limit(limitRows);
 ```
-#### 1 Enregistrement de la methode de solving dans spark
+#### 4 Enregistrement de la methode de solving dans spark
 Rq: on a jouté le caractere 'a' au sudoku pour qu'elle soit interpreté comme string  
 ```c# 
         spark.Udf().Register<string, string>("MLudf", (text) => Solve(text.Trim(new Char[] { ' ', '"', 'a' })));
 ```
-#### 1 Parsing du sudoku en strin to grid 
+#### 5 Parsing du sudoku en strin to grid 
 ```c# 
 public static int[,] TextToGrid(string sudokuText)
         {
@@ -63,7 +63,7 @@ public static int[,] TextToGrid(string sudokuText)
 ```
 
 
-#### 1 Methode de solving 
+#### 6 Methode de solving 
 ```c# 
   public static string Solve(string sudokuText)
         {
@@ -76,9 +76,9 @@ public static int[,] TextToGrid(string sudokuText)
         }
 ```
 
-#### 2.3 Build et publication du projet 
+#### Build et publication du projet 
     dotnet publish -f netcoreapp3.1
 
-#### 2.3 Execution du program avec un jeux de parametre different (limitRows,coreCount,nodeCount ) et comparaison des resultats  
+#### Execution du program avec un jeux de parametre different (limitRows,coreCount,nodeCount ) et comparaison des resultats  
     spark-submit --class org.apache.spark.deploy.dotnet.DotnetRunner --master local microsoft-spark-3-0_2.12-1.1.1.jar ESGF.Sudoku.Spark.Swarm.exe [limitRows] [coreCount] [nodeCount]
 
