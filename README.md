@@ -37,7 +37,7 @@ Rq: on a jouté le caractere 'a' au sudoku pour qu'elle soit interpreté comme s
 ```c# 
         spark.Udf().Register<string, string>("MLudf", (text) => Solve(text.Trim(new Char[] { ' ', '"', 'a' })));
 ```
-##### 5 - Parsing du sudoku en strin to grid 
+##### 5 - Parsing du sudoku en string to grid 
 ```c# 
 public static int[,] TextToGrid(string sudokuText)
         {
